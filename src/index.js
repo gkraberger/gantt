@@ -151,6 +151,9 @@ export default class Gantt {
             if (date_utils.diff(task._end, task._start, 'year') > 10) {
                 task.end = null;
             }
+            if(task.milestone === undefined){
+                task.milestone=false;
+            }
 
             // cache index
             task._index = i;

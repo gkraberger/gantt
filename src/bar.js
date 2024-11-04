@@ -29,6 +29,10 @@ export default class Bar {
         this.compute_duration();
         this.corner_radius = this.gantt.options.bar_corner_radius;
         this.width = this.gantt.options.column_width * this.duration;
+        if(this.task.milestone) {
+            this.height = this.height/1.414214;
+            this.width = this.height;
+        }
         this.progress_width =
             this.gantt.options.column_width *
                 this.duration *
@@ -78,10 +82,12 @@ export default class Bar {
 
     draw() {
         this.draw_bar();
-        this.draw_progress_bar();
-        if (this.gantt.options.show_expected_progress) {
-            this.prepare_expected_progress_values();
-            this.draw_expected_progress_bar();
+        if(!this.task.milestone) {
+            this.draw_progress_bar();
+            if (this.gantt.options.show_expected_progress) {
+                this.prepare_expected_progress_values();
+                this.draw_expected_progress_bar();
+            }
         }
         this.draw_label();
         this.draw_resize_handles();
@@ -104,7 +110,9 @@ export default class Bar {
                 (/^((?!chrome|android).)*safari/i.test(navigator.userAgent) &&
                 !this.task.important
                     ? ' safari'
-                    : ''),
+                    : '')
+                +(this.task.milestone ? ' milestone' : '')
+            ,
             append_to: this.bar_group,
         });
 
@@ -176,7 +184,7 @@ export default class Bar {
 
         createSVG('text', {
             x: x_coord,
-            y: this.y + this.height / 2,
+            y: this.y + this.gantt.options.bar_height / 2,
             innerHTML: this.task.name,
             class: 'bar-label',
             append_to: this.bar_group,

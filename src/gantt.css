@@ -290,6 +290,12 @@
             outline: 1px solid black;
         }
 
+        & .bar.milestone {
+            transform: rotate(45deg);
+            transform-box: fill-box;
+            transform-origin: 25% 50%;
+        }
+
         &:hover {
             .bar {
                 transition: transform 0.3s ease;
