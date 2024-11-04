@@ -28,6 +28,7 @@ const VIEW_MODE_PADDING = {
 
 const DEFAULT_OPTIONS = {
     header_height: 65,
+    x_zoom: 100,
     column_width: 30,
     view_modes: [...Object.values(VIEW_MODE)],
     bar_height: 30,
@@ -255,6 +256,7 @@ export default class Gantt {
             this.options.step = 24 * 365;
             this.options.column_width = 120;
         }
+        this.options.column_width *= this.options.x_zoom/100.0;
     }
 
     setup_dates() {

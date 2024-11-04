@@ -63,6 +63,7 @@ var gantt = new Gantt('#gantt', tasks, {
     view_modes: ['Quarter Day', 'Half Day', 'Day', 'Week', 'Month'],
     bar_height: 20,
     bar_corner_radius: 3,
+    x_zoom: 80,
     arrow_curve: 5,
     padding: 18,
     view_mode: 'Day',
