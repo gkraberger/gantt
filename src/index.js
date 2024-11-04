@@ -35,6 +35,7 @@ const DEFAULT_OPTIONS = {
     bar_corner_radius: 3,
     arrow_curve: 5,
     padding: 18,
+    arrow_padding: 4,
     view_mode: 'Day',
     date_format: 'YYYY-MM-DD',
     show_expected_progress: false,
