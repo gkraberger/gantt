@@ -26,7 +26,7 @@ export default class Arrow {
             this.gantt.options.header_height +
             this.gantt.options.bar_height +
             (this.gantt.options.padding + this.gantt.options.bar_height) *
-                this.from_task.task._index +
+                this.from_task.task._row_index +
             this.gantt.options.padding;
 
         const end_x =
@@ -35,11 +35,11 @@ export default class Arrow {
             this.gantt.options.header_height +
             this.gantt.options.bar_height / 2 +
             (this.gantt.options.padding + this.gantt.options.bar_height) *
-                this.to_task.task._index +
+                this.to_task.task._row_index +
             this.gantt.options.padding;
 
         const from_is_below_to =
-            this.from_task.task._index > this.to_task.task._index;
+            this.from_task.task._row_index > this.to_task.task._row_index;
         const curve = this.gantt.options.arrow_curve;
         const clockwise = from_is_below_to ? 1 : 0;
         const curve_y = from_is_below_to ? -curve : curve;

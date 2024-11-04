@@ -525,7 +525,7 @@ export default class Bar {
         this.y =
             this.gantt.options.header_height +
             this.gantt.options.padding +
-            this.task._index * (this.height + this.gantt.options.padding);
+            this.task._row_index * (this.height + this.gantt.options.padding);
     }
 
     compute_duration() {

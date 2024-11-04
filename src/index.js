@@ -125,6 +125,7 @@ export default class Gantt {
     }
 
     setup_tasks(tasks) {
+        var row_index = 0;
         // prepare tasks
         this.tasks = tasks.map((task, i) => {
             // convert to Date objects
@@ -154,9 +155,26 @@ export default class Gantt {
             if(task.milestone === undefined){
                 task.milestone=false;
             }
+            if(task.same_row === undefined){
+                task.same_row=false;
+            }
 
             // cache index
             task._index = i;
+
+            if(task.same_row) {
+                row_index -= 1;
+            }
+            if(task.row_index !== undefined)
+            {
+                task._row_index = task.row_index;
+                row_index = task.row_index;
+            }
+            else
+            {
+                task._row_index = row_index;
+            }
+            row_index += 1;
 
             // invalid dates
             if (!task.start && !task.end) {
@@ -210,6 +228,15 @@ export default class Gantt {
         });
 
         this.setup_dependencies();
+
+        var n_rows = 0;
+        for (let t of this.tasks) {
+            if(t._row_index+1 > n_rows)
+            {
+                n_rows = t._row_index+1;
+            }
+        }
+        this._n_tasks = n_rows;
     }
 
     setup_dependencies() {
@@ -395,7 +422,7 @@ export default class Gantt {
             this.options.header_height +
             this.options.padding +
             (this.options.bar_height + this.options.padding) *
-                this.tasks.length;
+                this._n_tasks;
 
         createSVG('rect', {
             x: 0,
@@ -420,7 +447,7 @@ export default class Gantt {
 
         let row_y = this.options.header_height + this.options.padding / 2;
 
-        for (let _ of this.tasks) {
+        for (var i=0; i<this._n_tasks; i+=1) {
             createSVG('rect', {
                 x: 0,
                 y: row_y,
@@ -557,7 +584,7 @@ export default class Gantt {
         let tick_y = this.options.header_height + this.options.padding / 2;
         let tick_height =
             (this.options.bar_height + this.options.padding) *
-            this.tasks.length;
+            this._n_tasks;
 
         let $lines_layer = createSVG('g', {
             class: 'lines_layer',
@@ -632,7 +659,7 @@ export default class Gantt {
                     this.options.column_width;
                 const height =
                     (this.options.bar_height + this.options.padding) *
-                    this.tasks.length;
+                    this._n_tasks;
                 createSVG('rect', {
                     x,
                     y: this.options.header_height + this.options.padding / 2,
@@ -706,7 +733,7 @@ export default class Gantt {
             const top = this.options.header_height + this.options.padding / 2;
             const height =
                 (this.options.bar_height + this.options.padding) *
-                this.tasks.length;
+                this._n_tasks;
             this.$current_highlight = this.create_el({
                 top,
                 left,
