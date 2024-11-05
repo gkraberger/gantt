@@ -205,16 +205,15 @@ export default class Gantt {
             }
 
             // dependencies
-            if (typeof task.dependencies === 'string' || !task.dependencies) {
-                let deps = [];
-                if (task.dependencies) {
-                    deps = task.dependencies
-                        .split(',')
+            if(!task.dependencies) {
+                task.dependencies = [];
+            }
+            if (typeof task.dependencies === 'string') {
+                task.dependencies = task.dependencies.split(',');
+            }
+            task.dependencies = task.dependencies
                         .map((d) => d.trim().replaceAll(' ', '_'))
                         .filter((d) => d);
-                }
-                task.dependencies = deps;
-            }
 
             // uids
             if (!task.id) {
