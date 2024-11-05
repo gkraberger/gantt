@@ -342,6 +342,10 @@ export default class Gantt {
         this.gantt_start = date_utils.parse(
             date_utils.format(gantt_start, format_string),
         );
+        //make sure weekly grid starts on Monday
+        if (this.view_is(VIEW_MODE.WEEK)) {
+            this.gantt_start.setDate(this.gantt_start.getDate() - (this.gantt_start.getDay() + 6) % 7);
+        }
         this.gantt_start.setHours(0, 0, 0, 0);
         this.gantt_end = date_utils.add(
             gantt_end,
