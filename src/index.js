@@ -36,6 +36,8 @@ const DEFAULT_OPTIONS = {
     arrow_curve: 5,
     padding: 18,
     arrow_padding: 4,
+    arrow_cascade_middle: true,
+    arrow_down_right: true,
     view_mode: 'Day',
     date_format: 'YYYY-MM-DD',
     show_expected_progress: false,
