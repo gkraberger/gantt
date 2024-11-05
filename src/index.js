@@ -681,18 +681,9 @@ export default class Gantt {
 
     //compute the horizontal x distance
     computeGridHighlightDimensions(view_mode) {
-        let x = this.options.column_width / 2;
-
         if (this.view_is(VIEW_MODE.DAY)) {
-            let today = date_utils.today();
-            return {
-                x:
-                    x +
-                    (date_utils.diff(today, this.gantt_start, 'hour') /
-                        this.options.step) *
-                        this.options.column_width,
-                date: today,
-            };
+             let today = date_utils.today();
+             return today;
         }
 
         for (let date of this.dates) {
@@ -711,13 +702,9 @@ export default class Gantt {
                     break;
             }
             if (todayDate >= startDate && todayDate <= endDate) {
-                return { x, date: startDate };
-            } else {
-                x += this.options.column_width;
+                return startDate;
             }
         }
-
-        return { x }
     }
 
     make_grid_highlights() {
@@ -731,7 +718,7 @@ export default class Gantt {
             this.view_is(VIEW_MODE.YEAR)
         ) {
             // Used as we must find the _end_ of session if view is not Day
-            const { x: left, date } = this.computeGridHighlightDimensions(
+            const date = this.computeGridHighlightDimensions(
                 this.options.view_mode,
             );
             if (!date || !this.dates.find((d) => d.getTime() == date.getTime())) return;
@@ -739,6 +726,10 @@ export default class Gantt {
             const height =
                 (this.options.bar_height + this.options.padding) *
                 this._n_tasks;
+
+            const diff = date_utils.diff(new Date(), this.gantt_start, 'hour');
+            let left = (diff / this.options.step) * this.options.column_width;
+
             this.$current_highlight = this.create_el({
                 top,
                 left,
@@ -751,8 +742,6 @@ export default class Gantt {
             );
             if ($today) {
                 $today.classList.add('current-date-highlight');
-                $today.style.top = +$today.style.top.slice(0, -2) - 4 + 'px';
-                $today.style.left = +$today.style.left.slice(0, -2) - 8 + 'px';
             }
         }
     }
@@ -879,7 +868,7 @@ export default class Gantt {
             x: last_date_info
                 ? last_date_info.base_pos_x + last_date_info.column_width
                 : 0,
-            lower_y: this.options.header_height - 20,
+            lower_y: this.options.header_height - 12,
             upper_y: this.options.header_height - 50,
         };
         const x_pos = {
