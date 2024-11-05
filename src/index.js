@@ -131,6 +131,7 @@ export default class Gantt {
         var row_index = 0;
         // prepare tasks
         this.tasks = tasks.map((task, i) => {
+            task.critical = false;
             // convert to Date objects
             task._start = date_utils.parse(task.start);
             if (task.end === undefined && task.duration !== undefined) {
@@ -244,10 +245,26 @@ export default class Gantt {
     setup_dependencies() {
         this.dependency_map = {};
         for (let t of this.tasks) {
+            var latest_end = new Date(0);
             for (let d of t.dependencies) {
+                const dt = this.get_task(d);
+                if(dt._end > latest_end){
+                    latest_end = dt._end;
+                    this.get_task(t.id).critical_dependency = d;
+                }
                 this.dependency_map[d] = this.dependency_map[d] || [];
                 this.dependency_map[d].push(t.id);
             }
+        }
+        this.setup_critical_path();
+    }
+
+    setup_critical_path() {
+        this.tasks[this.tasks.length-1].critical = true;;
+        var current_task = this.tasks[this.tasks.length-1];
+        while(current_task.critical_dependency) {
+            this.get_task(current_task.critical_dependency).critical=true;
+            current_task=this.get_task(current_task.critical_dependency);
         }
     }
 

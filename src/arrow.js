@@ -119,11 +119,16 @@ export default class Arrow {
         }
     }
 
+    is_critical() {
+        return (this.from_task.task.critical && this.to_task.task.critical);
+    }
+
     draw() {
         this.element = createSVG('path', {
             d: this.path,
             'data-from': this.from_task.task.id,
             'data-to': this.to_task.task.id,
+            'class' : this.is_critical() ? 'critical-path' : ''
         });
     }
 
